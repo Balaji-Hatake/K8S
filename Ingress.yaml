@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: balaji-resume
+  name: resume-ingress
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80, "HTTPS":443}]'
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:eu-north-1:322209956530:certificate/026e9b94-219a-446f-a6c3-69d3ea7dbccd, arn:aws:acm:eu-north-1:322209956530:certificate/dfdef484-a9d0-48e9-9a79-02531559908c
+spec:
+  ingressClassName: alb
+  rules:
+    - http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: resume-service
+              port:
+                number: 80
