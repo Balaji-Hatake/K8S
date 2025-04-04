@@ -1,0 +1,11 @@
+# For creating eks cluster using fargate
+
+eksctl create fargateprofile --cluster balaji-resume --region eu-north-1 --name balaji-resume-app
+
+# To create a IAM Service Account so the pods in the eks clusier can access the services
+
+eksctl create iamserviceaccount --cluster=balaji-resume --namespace=kube-system --name=aws-load-balancer-controller --role-name AmazonEKSLoadBalancerControllerRole --attach-policy-arn=arn:aws:iam::322209956530:policy/AWSLoadBalancerControllerIAMPolicy --approve
+
+# Helm install the aws load balancer controller so the project is exposed to internet
+
+helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=balaji-resume --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer-controller --set region=eu-north-1 --set vpcId=vpc-01ac435ba82b9f8a6
